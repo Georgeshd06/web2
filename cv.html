@@ -1,49 +1,101 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <link rel="stylesheet" href="styles.css" />
-    <title>My CV</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Professional CV showcasing education, experience, and skills">
+  <title>My CV | Professional Portfolio</title>
+  <link rel="icon" type="image/png" href="vitaee.jpg">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <header>
-        <h1>Curriculum Vitae</h1>
-        <nav>
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="cv.html">My CV</a></li>
-                <li><a href="schedule.html">Schedule</a></li>
-                <li><a href="contact.html">Contact</a></li>
-                <li><a href="quiz.html">Quiz</a></li>
-            </ul>
-        </nav>
-    </header>
-    <main>
-        <section>
-            <h2>Education</h2>
-            <p>Bachelor of Science in Computer Science - USEK</p>
-        </section>
-        <section>
-            <h2>Experience</h2>
-            <ul>
-                <li>Web Developer at Ziad Corporation (2024 - Present)</li>
-                <li>Web Developer at Eid&Co</li>
-                <li>Database Senior Developer at Maroun Enterprises</li>
-            </ul>
-        </section>
-        <section>
-            <h2>Skills</h2>
-            <ul>
-                <li>HTML & CSS</li>
-                <li>JavaScript</li>
-                <li>Leadership</li>
-            </ul>
-        </section>
-    </main>
-    <footer>
-        <p>&copy; Georges Haddad</p>
-        <p>&copy; Ryan Bou Mansour</p>
-    </footer>
+  <header>
+    <h1>Curriculum Vitae</h1>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="cv.html" class="active">My CV</a></li>
+        <li><a href="schedule.html">Schedule</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="quiz.html">Quiz</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="cv-section">
+      <h2><i class="fas fa-graduation-cap"></i> Education</h2>
+      <p>Bachelor of Science in Computer Science - USEK</p>
+      <p>Graduation Year: 2024</p>
+      <p>GPA: 3.8/4.0</p>
+    </section>
+    
+    <section class="cv-section">
+      <h2><i class="fas fa-briefcase"></i> Experience</h2>
+      <ul>
+        <li>Web Developer at Ziad Corporation (2024 - Present)
+          <p>Lead development of responsive web applications using modern JavaScript frameworks.</p>
+        </li>
+        <li>Web Developer at Eid&Co (2022 - 2024)
+          <p>Created and maintained client websites, focusing on user experience and performance.</p>
+        </li>
+        <li>Database Senior Developer at Maroun Enterprises (2020 - 2022)
+          <p>Designed and optimized database architectures for enterprise applications.</p>
+        </li>
+      </ul>
+    </section>
+    
+    <section class="cv-section">
+      <h2><i class="fas fa-tools"></i> Skills</h2>
+      <ul>
+        <li>HTML5 & CSS3</li>
+        <li>JavaScript (React, Vue, Node.js)</li>
+        <li>Database Management (SQL, NoSQL)</li>
+        <li>UI/UX Design</li>
+        <li>Leadership & Project Management</li>
+        <li>Problem Solving & Critical Thinking</li>
+      </ul>
+    </section>
+    
+    <section class="cv-section">
+      <h2><i class="fas fa-certificate"></i> Certifications</h2>
+      <ul>
+        <li>Full Stack Web Development - Udacity</li>
+        <li>Advanced JavaScript - Coursera</li>
+        <li>UI/UX Design Fundamentals - Google</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-nav">
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="cv.html">My CV</a></li>
+            <li><a href="schedule.html">Schedule</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="quiz.html">Quiz</a></li>
+            <li><a href="https://www.privacypolicies.com/blog/privacy-policy-template/" target="_blank">Privacy Policy</a></li>
+            <li><a href="https://www.termsfeed.com/blog/sample-terms-of-service-template/" target="_blank">Terms of Service</a></li>
+          </ul>
+        </div>
+        
+        <div class="social-links">
+          <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+          <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="https://www.instagram.com/georges.hd?igsh=Y3dsM3JjOGpuaW5w&utm_source=qr"target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        </div>
+        
+        <div class="copyright">
+          <p>&copy; 2025 Professional Website by Georges Haddad <span>|</span> Ryan Bou Mansour</p>
+        </div>
+      </div>
+    </div>
+  </footer>
 </body>
 </html>

@@ -1,42 +1,128 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <link rel="stylesheet" href="styles.css" />
-    <title>Home</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Personal professional portfolio and university schedule">
+  <title>Professional Portfolio</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="icon" type="image/png" href="home.jpg">
 </head>
 <body>
-    <header>
-        <h1>Welcome to My Website</h1>
-        <nav>
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="cv.html">My CV</a></li>
-                <li><a href="schedule.html">Schedule</a></li>
-                <li><a href="contact.html">Contact</a></li>
-                <li><a href="quiz.html">Quiz</a></li>
-            </ul>
-        </nav>
-    </header>
-    <main>
-        <section>
-            <h2>About the Website</h2>
-            <p>This is a professional portfolio showcasing my CV, weekly schedule, and interactive features like a quiz and contact form. Use the links to navigate.</p>
-        </section>
-        <aside>
-            <h3>Quick Links</h3>
-            <ul>
-                <li><a href="cv.html">View CV</a></li>
-                <li><a href="schedule.html">Course Schedule</a></li>
-                <li><a href="contact.html">Contact Us</a></li>
-                <li><a href="quiz.html">Take the Quiz</a></li>
-            </ul>
-        </aside>
-    </main>
-    <footer>
-        <p>&copy; Georges Haddad</p>
-        <p>&copy; Ryan Bou Mansour</p>
-    </footer>
+  <header>
+    <h1>Professional Portfolio</h1>
+    <nav>
+      <ul>
+        <li><a href="index.html" class="active">Home</a></li>
+        <li><a href="cv.html">My CV</a></li>
+        <li><a href="schedule.html">Schedule</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="quiz.html">Quiz</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section>
+      <h2>Welcome to My Portfolio</h2>
+      <p>Hello! we are computer science students passionate about web development and programming. This website showcases our professional experience, academic schedule, and skills.</p>
+      
+      <div class="features">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-file-alt"></i>
+          </div>
+          <h3>My CV</h3>
+          <p>View my education, skills, and professional experience.</p>
+          <a href="cv.html" class="btn">View CV</a>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-calendar-alt"></i>
+          </div>
+          <h3>Class Schedule</h3>
+          <p>Check my weekly university course schedule.</p>
+          <a href="schedule.html" class="btn">View Schedule</a>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-envelope"></i>
+          </div>
+          <h3>Contact Me</h3>
+          <p>Have questions or want to collaborate? Get in touch!</p>
+          <a href="contact.html" class="btn">Contact</a>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-question-circle"></i>
+          </div>
+          <h3>Take the Quiz</h3>
+          <p>Test your knowledge with our interactive quiz.</p>
+          <a href="quiz.html" class="btn">Start Quiz</a>
+        </div>
+      </div>
+    </section>
+    
+    <aside>
+      <h3>Latest Updates</h3>
+      <div class="updates">
+        <div class="update-item">
+          <span class="update-date">April 20, 2025</span>
+          <p>Added new web programming projects to my portfolio.</p>
+        </div>
+        <div class="update-item">
+          <span class="update-date">April 15, 2025</span>
+          <p>Updated my CV with recent achievements.</p>
+        </div>
+        <div class="update-item">
+          <span class="update-date">April 10, 2025</span>
+          <p>Completed Database Management final project.</p>
+        </div>
+      </div>
+      
+      <h3>Quick Links</h3>
+      <ul class="quick-links">
+        <li><a href="https://www.usek.edu.lb/"target="_blank"><i class="fas fa-graduation-cap"></i> University Portal</a></li>
+        <li><a href="#"><i class="fab fa-github"></i> GitHub Profile</a></li>
+        <li><a href="#"><i class="fab fa-linkedin"></i> LinkedIn</a></li>
+      </ul>
+    </aside>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-nav">
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="cv.html">My CV</a></li>
+            <li><a href="schedule.html">Schedule</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="quiz.html">Quiz</a></li>
+            <li><a href="https://www.privacypolicies.com/blog/privacy-policy-template/" target="_blank">Privacy Policy</a></li>
+            <li><a href="https://www.termsfeed.com/blog/sample-terms-of-service-template/" target="_blank">Terms of Service</a></li>
+          </ul>
+        </div>
+        
+        <div class="social-links">
+          <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+          <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="https://www.instagram.com/georges.hd?igsh=Y3dsM3JjOGpuaW5w&utm_source=qr"target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        </div>
+        
+        <div class="copyright">
+          <p>&copy; 2025 Professional Portfolio by Georges Haddad <span>|</span> Ryan Bou Mansour</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+  
+  <script src="script.js"></script>
 </body>
 </html>

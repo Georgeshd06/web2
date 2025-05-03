@@ -1,62 +1,327 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Quiz</title>
-    <link rel="stylesheet" href="styles.css" />
-    <script defer src="script.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Test your knowledge with our interactive web development quiz">
+  <title>Quiz | Professional Portfolio</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" type="image/png" href="quizz.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script defer src="script.js"></script>
+  <style>
+    .quiz-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem;
+      background-color: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .quiz-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .quiz-header h2 {
+      color: #2c3e50;
+      margin-bottom: 1rem;
+    }
+
+    .quiz-header p {
+      color: #666;
+      font-size: 1.1rem;
+    }
+
+    .question-container {
+      background-color: #ffffff;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      border-radius: 8px;
+      border-left: 4px solid #3498db;
+    }
+
+    .question-container h3 {
+      color: #2c3e50;
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+    }
+
+    .options-container {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+
+    .option-item {
+      display: flex;
+      align-items: center;
+      padding: 0.8rem;
+      background-color: #0099ff;
+      border: 1px solid #57e3fc;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+    }
+
+    .option-item:hover {
+      background-color: #00e5ff;
+      border-color: #3498db;
+      transform: translateX(5px);
+    }
+
+    .option-item input[type="radio"] {
+      margin-right: 10px;
+    }
+
+    .option-item label {
+      flex: 1;
+      cursor: pointer;
+    }
+
+    .quiz-actions {
+      display: flex;
+      justify-content: center;
+      margin-top: 2rem;
+    }
+
+    button[type="submit"] {
+      background-color: #3498db;
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      font-size: 1rem;
+      font-weight: 500;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    button[type="submit"]:hover {
+      background-color: #2980b9;
+      transform: translateY(-2px);
+    }
+
+    #quizResult {
+      margin-top: 2rem;
+      padding: 1.5rem;
+      background-color: #e8f4fc;
+      border-radius: 8px;
+      text-align: center;
+      display: none;
+    }
+
+    #quizResult.show {
+      display: block;
+      animation: fadeIn 0.5s ease-out;
+    }
+
+    #quizResult h3 {
+      color: #2c3e50;
+      margin-bottom: 1rem;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @media (max-width: 768px) {
+      .quiz-container {
+        padding: 1.5rem;
+      }
+      
+      .question-container {
+        padding: 1.2rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .quiz-container {
+        padding: 1rem;
+      }
+      
+      .question-container {
+        padding: 1rem;
+      }
+      
+      .option-item {
+        padding: 0.6rem;
+      }
+    }
+  </style>
 </head>
 <body>
-    <header>
-        <h1>Quiz</h1>
-        <nav>
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="cv.html">My CV</a></li>
-                <li><a href="schedule.html">Schedule</a></li>
-                <li><a href="contact.html">Contact</a></li>
-                <li><a href="quiz.html">Quiz</a></li>
-            </ul>
-        </nav>
-    </header>
-    <main>
-        <section>
-            <form id="quizForm">
-                <h3>1. What does HTML stand for?</h3>
-                <input type="radio" name="q1" value="a">Hyper Trainer Marking Language<br />
-                <input type="radio" name="q1" value="b">Hyper Text Markup Language<br />
-                <input type="radio" name="q1" value="c">High Text Machine Language<br /><br />
+  <header>
+    <h1>Knowledge Quiz</h1>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="cv.html">My CV</a></li>
+        <li><a href="schedule.html">Schedule</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="quiz.html" class="active">Quiz</a></li>
+      </ul>
+    </nav>
+  </header>
 
-                <h3>2. What does CSS control?</h3>
-                <input type="radio" name="q2" value="a">Structure<br />
-                <input type="radio" name="q2" value="b">Content<br />
-                <input type="radio" name="q2" value="c">Style<br /><br />
-                
-                <h3>3. Who is the best doctor?</h3>
-                <input type="radio" name="q3" value="a">Ziad Eid<br />
-                <input type="radio" name="q3" value="b">Ziad Charbel Eid<br />
-                <input type="radio" name="q3" value="c">Both<br /><br />
+  <main>
+    <div class="quiz-container">
+      <div class="quiz-header">
+        <h2>Web Development Knowledge Quiz</h2>
+        <p>Test your knowledge with these questions about web development and more. Submit your answers to see your score!</p>
+      </div>
 
-                <h3>4. Which comapny is the most successfull?</h3>
-                <input type="radio" name="q4" value="a">Ziad Eid Corporation<br />
-                <input type="radio" name="q4" value="b">Ziad Charbel Eid Enterprises<br />
-                <input type="radio" name="q4" value="c">Both<br /><br />
-                
-                <h3>5. In which ear Peter Abou Jaoudeh can't hear?</h3>
-                <input type="radio" name="q5" value="a">Left<br />
-                <input type="radio" name="q5" value="b">Right<br />
-                <input type="radio" name="q5" value="c">None<br /><br />
+      <form id="quizForm">
+        <div class="question-container">
+          <h3>1. What does HTML stand for?</h3>
+          <div class="options-container">
+            <div class="option-item">
+              <input type="radio" id="q1a" name="q1" value="a">
+              <label for="q1a">Hyper Trainer Marking Language</label>
+            </div>
+            <div class="option-item">
+              <input type="radio" id="q1b" name="q1" value="b">
+              <label for="q1b">Hyper Text Markup Language</label>
+            </div>
+            <div class="option-item">
+              <input type="radio" id="q1c" name="q1" value="c">
+              <label for="q1c">High Text Machine Language</label>
+            </div>
+          </div>
+        </div>
 
+        <div class="question-container">
+          <h3>2. What does CSS control?</h3>
+          <div class="options-container">
+            <div class="option-item">
+              <input type="radio" id="q2a" name="q2" value="a">
+              <label for="q2a">Structure</label>
+            </div>
+            <div class="option-item">
+              <input type="radio" id="q2b" name="q2" value="b">
+              <label for="q2b">Content</label>
+            </div>
+            <div class="option-item">
+              <input type="radio" id="q2c" name="q2" value="c">
+              <label for="q2c">Style</label>
+            </div>
+          </div>
+        </div>
 
-                <button type="submit">Submit Quiz</button>
-            </form>
-            <div id="quizResult"></div>
-        </section>
-    </main>
-    <footer>
-        <p>&copy; Georges Haddad </p>
-        <p>&copy; Ryan Bou Mansour</p>
-    </footer>
+        <div class="question-container">
+          <h3>3. Who is the best doctor?</h3>
+          <div class="options-container">
+            <div class="option-item">
+              <input type="radio" id="q3a" name="q3" value="a">
+              <label for="q3a">Ziad Eid</label>
+            </div>
+            <div class="option-item">
+              <input type="radio" id="q3b" name="q3" value="b">
+              <label for="q3b">Ziad Charbel Eid</label>
+            </div>
+            <div class="option-item">
+              <input type="radio" id="q3c" name="q3" value="c">
+              <label for="q3c">Both</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="question-container">
+          <h3>4. Which company is the most successful?</h3>
+          <div class="options-container">
+            <div class="option-item">
+              <input type="radio" id="q4a" name="q4" value="a">
+              <label for="q4a">Ziad Eid Corporation</label>
+            </div>
+            <div class="option-item">
+              <input type="radio" id="q4b" name="q4" value="b">
+              <label for="q4b">Ziad Charbel Eid Enterprises</label>
+            </div>
+            <div class="option-item">
+              <input type="radio" id="q4c" name="q4" value="c">
+              <label for="q4c">Both</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="question-container">
+          <h3>5. In which ear Peter Abou Jaoudeh can't hear?</h3>
+          <div class="options-container">
+            <div class="option-item">
+              <input type="radio" id="q5a" name="q5" value="a">
+              <label for="q5a">Left</label>
+            </div>
+            <div class="option-item">
+              <input type="radio" id="q5b" name="q5" value="b">
+              <label for="q5b">Right</label>
+            </div>
+            <div class="option-item">
+              <input type="radio" id="q5c" name="q5" value="c">
+              <label for="q5c">None</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="quiz-actions">
+          <button type="submit">
+            <i class="fas fa-check-circle"></i> Submit Quiz
+          </button>
+        </div>
+      </form>
+
+      <div id="quizResult"></div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-nav">
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="cv.html">My CV</a></li>
+            <li><a href="schedule.html">Schedule</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="quiz.html">Quiz</a></li>
+            <li><a href="https://www.privacypolicies.com/blog/privacy-policy-template/" target="_blank">Privacy Policy</a></li>
+            <li><a href="https://www.termsfeed.com/blog/sample-terms-of-service-template/" target="_blank">Terms of Service</a></li>
+          </ul>
+        </div>
+        
+        <div class="social-links">
+          <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+          <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="https://www.instagram.com/georges.hd?igsh=Y3dsM3JjOGpuaW5w&utm_source=qr"target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        </div>
+        
+        <div class="copyright">
+          <p>&copy; 2025 Professional Website by Georges Haddad <span>|</span> Ryan Bou Mansour</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Additional script to show quiz result with animation
+    document.addEventListener('DOMContentLoaded', () => {
+      const quizForm = document.getElementById('quizForm');
+      const resultDiv = document.getElementById('quizResult');
+      
+      if (quizForm) {
+        quizForm.addEventListener('submit', function() {
+          // Add class for animation after the main script processes the score
+          setTimeout(() => {
+            resultDiv.classList.add('show');
+          }, 100);
+        });
+      }
+    });
+  </script>
 </body>
 </html>

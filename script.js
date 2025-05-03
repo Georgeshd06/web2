@@ -26,7 +26,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const answers = {
                 q1: 'b',
-                q2: 'c'
+                q2: 'c',
+                q3: 'c',
+                q4: 'c',
+                q5: 'a'
             };
 
             Object.keys(answers).forEach((q, index) => {
