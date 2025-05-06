@@ -1,411 +1,126 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Professional Login Page</title>
-    <style>
-        :root {
-            --primary-color: #121424;
-            --secondary-color: #16213e;
-            --accent-color: #3b82f6;
-            --accent-hover: #2563eb;
-            --text-light: #ffffff;
-            --text-dark: #1a1a1a;
-            --card-bg: rgba(255, 255, 255, 0.1);
-            --box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-            --transition: all 0.3s ease;
-            --border-radius: 8px;
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background: var(--primary-color);
-            color: var(--text-light);
-            transition: var(--transition);
-            opacity: 0;
-            animation: fadeIn 0.8s ease-out forwards;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        
-        .container {
-            background-color: var(--card-bg);
-            border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
-            width: 400px;
-            padding: 40px;
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transform: scale(0.5);
-            opacity: 0;
-            animation: growIn 0.6s forwards ease-out;
-        }
-        
-        @keyframes growIn {
-            0% {
-                transform: scale(0.5);
-                opacity: 0;
-            }
-            70% {
-                transform: scale(1.05);
-            }
-            100% {
-                transform: scale(1);
-                opacity: 1;
-            }
-        }
-        
-        .logo {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        
-        .logo h1 {
-            color: var(--text-light);
-            font-size: 28px;
-            font-weight: 600;
-            position: relative;
-            display: inline-block;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-        }
-        
-        .logo h1::after {
-            content: '';
-            position: absolute;
-            height: 3px;
-            width: 0;
-            background: var(--accent-color);
-            bottom: -8px;
-            left: 0;
-            animation: underline 1s 0.6s forwards ease-out;
-        }
-        
-        @keyframes underline {
-            to {
-                width: 100%;
-            }
-        }
-        
-        h2 {
-            color: var(--text-light);
-            text-align: center;
-            margin-bottom: 25px;
-            font-weight: 500;
-        }
-        
-        .input-group {
-            position: relative;
-            margin-bottom: 25px;
-        }
-        
-        .input-group input {
-            width: 100%;
-            padding: 15px 15px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            background-color: rgba(255, 255, 255, 0.08);
-            border-radius: var(--border-radius);
-            color: var(--text-light);
-            font-size: 16px;
-            outline: none;
-            transition: var(--transition);
-            transform: translateY(20px);
-            opacity: 0;
-            animation: slideUp 0.5s forwards ease-out;
-        }
-        
-        .input-group:nth-child(1) input {
-            animation-delay: 0.7s;
-        }
-        
-        .input-group:nth-child(2) input {
-            animation-delay: 0.9s;
-        }
-        
-        @keyframes slideUp {
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-        
-        .input-group input:focus {
-            border-color: var(--accent-color);
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
-        }
-        
-        .input-group input::placeholder {
-            color: rgba(255, 255, 255, 0.6);
-        }
-        
-        .input-group label {
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            color: rgba(255, 255, 255, 0.6);
-            pointer-events: none;
-            transition: var(--transition);
-        }
-        
-        .input-group input:focus + label,
-        .input-group input:valid + label {
-            top: -10px;
-            left: 5px;
-            font-size: 12px;
-            color: var(--accent-color);
-            background-color: var(--secondary-color);
-            padding: 0 5px;
-        }
-        
-        .remember-forgot {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-            transform: translateY(20px);
-            opacity: 0;
-            animation: slideUp 0.5s 1.1s forwards ease-out;
-        }
-        
-        .remember-forgot label {
-            display: flex;
-            align-items: center;
-            color: var(--text-light);
-            font-size: 14px;
-            cursor: pointer;
-        }
-        
-        .remember-forgot input[type="checkbox"] {
-            margin-right: 8px;
-            cursor: pointer;
-            accent-color: var(--accent-color);
-        }
-        
-        .remember-forgot a {
-            color: var(--accent-color);
-            text-decoration: none;
-            font-size: 14px;
-            transition: var(--transition);
-            font-weight: 500;
-        }
-        
-        .remember-forgot a:hover {
-            color: var(--accent-hover);
-            text-decoration: underline;
-        }
-        
-        button {
-            width: 100%;
-            padding: 15px;
-            background-color: var(--accent-color);
-            border: none;
-            border-radius: var(--border-radius);
-            color: white;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            transform: translateY(20px);
-            opacity: 0;
-            animation: slideUp 0.5s 1.3s forwards ease-out;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-        }
-        
-        button:hover {
-            background-color: var(--accent-hover);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.4);
-        }
-        
-        button:active {
-            transform: translateY(0);
-        }
-        
-        .register {
-            text-align: center;
-            margin-top: 25px;
-            color: var(--text-light);
-            font-size: 14px;
-            transform: translateY(20px);
-            opacity: 0;
-            animation: slideUp 0.5s 1.5s forwards ease-out;
-        }
-        
-        .register a {
-            color: var(--accent-color);
-            text-decoration: none;
-            font-weight: 500;
-            transition: var(--transition);
-        }
-        
-        .register a:hover {
-            color: var(--accent-hover);
-            text-decoration: underline;
-        }
-        
-        .social-icons {
-            display: flex;
-            justify-content: center;
-            margin-top: 25px;
-            gap: 15px;
-            transform: translateY(20px);
-            opacity: 0;
-            animation: slideUp 0.5s 1.7s forwards ease-out;
-        }
-        
-        .social-icons a {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background-color: rgba(59, 130, 246, 0.3);
-            color: white;
-            font-size: 18px;
-            transition: var(--transition);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        }
-        
-        .social-icons a:hover {
-            background-color: var(--accent-color);
-            transform: translateY(-3px);
-            box-shadow: 0 5px 10px rgba(59, 130, 246, 0.3);
-        }
-        
-        /* Pulse animation for the login button */
-        .pulse {
-            animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-            0% {
-                box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4);
-            }
-            70% {
-                box-shadow: 0 0 0 10px rgba(59, 130, 246, 0);
-            }
-            100% {
-                box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
-            }
-        }
-        
-        /* Animation for login error */
-        #login-error {
-            text-align: center;
-            color: #ff4d4d;
-            margin-top: 10px;
-            font-size: 14px;
-            display: none;
-            animation: shake 0.5s ease-in-out;
-        }
-        
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-            20%, 40%, 60%, 80% { transform: translateX(5px); }
-        }
-        
-        /* Responsive styles */
-        @media (max-width: 600px) {
-            .container {
-                max-width: 90%;
-                margin: 60px auto;
-                padding: 1.5rem;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Personal professional portfolio and university schedule">
+  <title>Professional Portfolio</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="icon" type="image/png" href="home.jpg">
+  <script src="login1.js"></script>
 </head>
 <body>
-    <div class="container">
-        <div class="logo">
-            <h1>Professional Portfolio</h1>
-        </div>
-        <h2>Welcome Back</h2>
-        <form id="loginForm">
-            <div class="input-group">
-                <input type="text" id="firstName" required>
-                <label for="firstName">First Name</label>
-            </div>
-            <div class="input-group">
-                <input type="text" id="lastName" required>
-                <label for="lastName">Last Name</label>
-            </div>
-            <div class="remember-forgot">
-                <label>
-                    <input type="checkbox"> Remember me
-                </label>
-                <a href="#">Need Help?</a>
-            </div>
-            <button type="submit" class="pulse">Login</button>
-            <div id="login-error">Please enter your first and last name</div>
-        </form>
-        <div class="register">
-            Don't have an account? <a href="#">Sign up</a>
-        </div>
-        <div class="social-icons">
-            <a href="#" title="Login with Facebook">f</a>
-            <a href="#" title="Login with Google">G</a>
-            <a href="#" title="Login with Apple">A</a>
-        </div>
-    </div>
+  <header>
+    <h1>Professional Portfolio</h1>
+    <nav>
+      <ul>
+        <li><a href="login.html" class="active">Home</a></li>
+        <li><a href="cv.html">My CV</a></li>
+        <li><a href="schedule.html">Schedule</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="quiz.html">Quiz</a></li>
+      </ul>
+    </nav>
+  </header>
 
-    <script>
-        // Enhanced focus effects
-        const inputs = document.querySelectorAll('input');
-        inputs.forEach(input => {
-            input.addEventListener('focus', () => {
-                input.parentElement.classList.add('focused');
-            });
-            
-            input.addEventListener('blur', () => {
-                if (!input.value) {
-                    input.parentElement.classList.remove('focused');
-                }
-            });
-            
-            // For pre-filled inputs
-            if (input.value) {
-                input.parentElement.classList.add('focused');
-            }
-        });
+  <main>
+    <section>
+      <h2>Welcome to My Portfolio</h2>
+      <p>Hello! we are computer science students passionate about web development and programming. This website showcases our professional experience, academic schedule, and skills.</p>
+      
+      <div class="features">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-file-alt"></i>
+          </div>
+          <h3>My CV</h3>
+          <p>View my education, skills, and professional experience.</p>
+          <a href="cv.html" class="btn">View CV</a>
+        </div>
         
-        // Add pulse animation to login button after a delay
-        setTimeout(() => {
-            document.querySelector('button').classList.add('pulse');
-        }, 3000);
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-calendar-alt"></i>
+          </div>
+          <h3>Class Schedule</h3>
+          <p>Check my weekly university course schedule.</p>
+          <a href="schedule.html" class="btn">View Schedule</a>
+        </div>
         
-        // Handle form submission
-        const loginForm = document.getElementById('loginForm');
-        const errorMessage = document.getElementById('login-error');
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-envelope"></i>
+          </div>
+          <h3>Contact Me</h3>
+          <p>Have questions or want to collaborate? Get in touch!</p>
+          <a href="contact.html" class="btn">Contact</a>
+        </div>
         
-        loginForm.addEventListener('submit', function(event) {
-            event.preventDefault();
-            
-            const firstName = document.getElementById('firstName').value.trim();
-            const lastName = document.getElementById('lastName').value.trim();
-            
-            if (firstName === '' || lastName === '') {
-                errorMessage.style.display = 'block';
-            } else {
-                // Redirect to index.html regardless of input values (as long as they're not empty)
-                window.location.href = 'index.html';
-            }
-        });
-    </script>
-</body>
-</html>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-question-circle"></i>
+          </div>
+          <h3>Take the Quiz</h3>
+          <p>Test your knowledge with our interactive quiz.</p>
+          <a href="quiz.html" class="btn">Start Quiz</a>
+        </div>
+      </div>
+    </section>
+    
+    <aside>
+      <h3>Latest Updates</h3>
+      <div class="updates">
+        <div class="update-item">
+          <span class="update-date">April 20, 2025</span>
+          <p>Added new web programming projects to my portfolio.</p>
+        </div>
+        <div class="update-item">
+          <span class="update-date">April 15, 2025</span>
+          <p>Updated my CV with recent achievements.</p>
+        </div>
+        <div class="update-item">
+          <span class="update-date">April 10, 2025</span>
+          <p>Completed Database Management final project.</p>
+        </div>
+      </div>
+      
+      <h3>Quick Links</h3>
+      <ul class="quick-links">
+        <li><a href="https://www.usek.edu.lb/"target="_blank"><i class="fas fa-graduation-cap"></i> University Portal</a></li>
+        <li><a href="#"><i class="fab fa-github"></i> GitHub Profile</a></li>
+        <li><a href="#"><i class="fab fa-linkedin"></i> LinkedIn</a></li>
+      </ul>
+    </aside>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-nav">
+          <ul>
+            <li><a href="login.html">Home</a></li>
+            <li><a href="cv.html">My CV</a></li>
+            <li><a href="schedule.html">Schedule</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="quiz.html">Quiz</a></li>
+            <li><a href="https://www.privacypolicies.com/blog/privacy-policy-template/" target="_blank">Privacy Policy</a></li>
+            <li><a href="https://www.termsfeed.com/blog/sample-terms-of-service-template/" target="_blank">Terms of Service</a></li>
+          </ul>
+        </div>
+        
+        <div class="social-links">
+          <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+          <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="https://www.instagram.com/georges.hd?igsh=Y3dsM3JjOGpuaW5w&utm_source=qr"target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        </div>
+        
+        <div class="copyright">
+          <p>&copy; 2025 Professional Portfolio by Georges Haddad <span>|</span> Ryan Bou Mansour</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+  
+  

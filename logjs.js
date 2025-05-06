@@ -1,63 +1,56 @@
-// auth.js - Script to check authentication status on all protected pages
+// Enhanced focus effects
+const inputs = document.querySelectorAll('input');
+inputs.forEach(input => {
+    input.addEventListener('focus', () => {
+        input.parentElement.classList.add('focused');
+    });
+    
+    input.addEventListener('blur', () => {
+        if (!input.value) {
+            input.parentElement.classList.remove('focused');
+        }
+    });
+    
+    // For pre-filled inputs
+    if (input.value) {
+        input.parentElement.classList.add('focused');
+    }
+});
 
+// Add pulse animation to login button after a delay
+setTimeout(() => {
+    document.querySelector('button').classList.add('pulse');
+}, 3000);
+
+// Handle form submission
 document.addEventListener('DOMContentLoaded', function() {
-    // Check if user is logged in
-    const isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true' || 
-                        localStorage.getItem('isLoggedIn') === 'true';
+    const loginForm = document.getElementById('loginForm');
+    const errorMessage = document.getElementById('login-error');
     
-    // If not logged in and not on login page, redirect to login
-    if (!isLoggedIn && !window.location.pathname.includes('login.html')) {
-        window.location.href = 'login.html';
-        return;
-    }
-    
-    // If logged in and on login page, redirect to home
-    if (isLoggedIn && window.location.pathname.includes('login.html')) {
-        window.location.href = 'index.html';
-        return;
-    }
-    
-    // If we're on a protected page and logged in, update UI with username
-    if (isLoggedIn) {
-        const username = sessionStorage.getItem('username');
-        
-        // Add logout button to navigation if it doesn't exist
-        const nav = document.querySelector('nav ul');
-        if (nav) {
-            // Check if logout button already exists
-            if (!document.querySelector('.logout-button')) {
-                const logoutItem = document.createElement('li');
-                const logoutLink = document.createElement('a');
-                logoutLink.href = '#';
-                logoutLink.className = 'logout-button';
-                logoutLink.innerHTML = '<i class="fas fa-sign-out-alt"></i> Logout';
-                logoutLink.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    // Clear login status
-                    sessionStorage.removeItem('isLoggedIn');
-                    localStorage.removeItem('isLoggedIn');
-                    sessionStorage.removeItem('username');
-                    // Redirect to login page
-                    window.location.href = 'login.html';
-                });
-                logoutItem.appendChild(logoutLink);
-                nav.appendChild(logoutItem);
+    if (loginForm) {
+        loginForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const firstName = document.getElementById('firstName').value.trim();
+            const lastName = document.getElementById('lastName').value.trim();
+            
+            if (firstName === '' || lastName === '') {
+                // Show error message
+                errorMessage.style.display = 'block';
+            } else {
+                // Store login information
+                const username = firstName + ' ' + lastName;
+                sessionStorage.setItem('username', username);
+                sessionStorage.setItem('isLoggedIn', 'true');
+                
+                // If "Remember me" is checked, also store in localStorage
+                if (document.querySelector('input[type="checkbox"]').checked) {
+                    localStorage.setItem('isLoggedIn', 'true');
+                }
+                
+                // Redirect to login.html
+                window.location.href = 'login.html';
             }
-        }
-        
-        // Add welcome message in header if it doesn't exist
-        const header = document.querySelector('header');
-        if (header && !document.querySelector('.welcome-message')) {
-            const welcomeDiv = document.createElement('div');
-            welcomeDiv.className = 'welcome-message';
-            welcomeDiv.innerHTML = `<p>Welcome, <strong>${username}</strong>!</p>`;
-            welcomeDiv.style.cssText = `
-                color: white;
-                margin-top: 10px;
-                font-size: 0.9rem;
-                opacity: 0.9;
-            `;
-            header.appendChild(welcomeDiv);
-        }
+        });
     }
 });
