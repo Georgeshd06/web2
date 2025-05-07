@@ -1,43 +1,110 @@
 <?php
-// Get form data
-$name = isset($_POST['name']) ? htmlspecialchars($_POST['name']) : '';
-//Checks if the name field was submitted via POST.
-//If it exists: htmlspecialchars() is used to convert special characters (like <, >, &) to HTML-safe entities, helping prevent XSS (Cross-Site Scripting) attacks.
-//If it doesn’t exist: an empty string '' is assigned
-$email = isset($_POST['email']) ? htmlspecialchars($_POST['email']) : '';
-$subject = isset($_POST['subject']) ? htmlspecialchars($_POST['subject']) : '';
-$message = isset($_POST['message']) ? htmlspecialchars($_POST['message']) : '';
-
-if ($name && $email && $subject && $message) {
-  // Recipient email address
-  $to = 'georgeshaddad560@gmail.com'; // Change this to your email
-
-  // Email subject
-  $emailSubject = "Contact Form Submission: $subject";
-
-  // Email body
-  $emailBody = "You have received a new message from your website contact form.\n\n";
-  $emailBody .= "Name: $name\n";
-  $emailBody .= "Email: $email\n";
-  $emailBody .= "Subject: $subject\n";
-  $emailBody .= "Message:\n$message\n";
-
-  // Email headers
-  $headers = "From: $name <$email>\r\n";
-  $headers .= "Reply-To: $email\r\n";
-
-  // Send email
-  if (mail($to, $emailSubject, $emailBody, $headers)) {
-      echo "Message sent successfully!";
-  } else {
-      echo "Failed to send message. Please try again later.";
-  }
+// Check if form was submitted via POST
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Get form data with better input sanitization
+    $name = isset($_POST['name']) ? filter_var($_POST['name'], FILTER_SANITIZE_STRING) : '';
+    $email = isset($_POST['email']) ? filter_var($_POST['email'], FILTER_SANITIZE_EMAIL) : '';
+    $subject = isset($_POST['subject']) ? filter_var($_POST['subject'], FILTER_SANITIZE_STRING) : '';
+    $message = isset($_POST['message']) ? filter_var($_POST['message'], FILTER_SANITIZE_STRING) : '';
+    
+    // Extra validation
+    $errors = [];
+    
+    // Validate email format
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $errors[] = "Invalid email format";
+    }
+    
+    // Check if all required fields are filled
+    if (empty($name) || empty($email) || empty($subject) || empty($message)) {
+        $errors[] = "All fields are required";
+    }
+    
+    // Process if no errors
+    if (empty($errors)) {
+        // Recipient email address
+        $to = 'georgeshaddad560@gmail.com';
+        
+        // Email subject with better formatting
+        $emailSubject = "Contact Form: " . $subject;
+        
+        // Create email content in HTML format for better appearance
+        $emailContent = "
+        <html>
+        <head>
+            <title>Contact Form Submission</title>
+            <style>
+                body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+                .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+                h2 { color: #2c3e50; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+                .field { margin-bottom: 15px; }
+                .label { font-weight: bold; }
+                .message { background-color: #f9f9f9; padding: 15px; border-left: 4px solid #ddd; }
+            </style>
+        </head>
+        <body>
+            <div class='container'>
+                <h2>New Contact Form Submission</h2>
+                <div class='field'>
+                    <span class='label'>Name:</span> {$name}
+                </div>
+                <div class='field'>
+                    <span class='label'>Email:</span> {$email}
+                </div>
+                <div class='field'>
+                    <span class='label'>Subject:</span> {$subject}
+                </div>
+                <div class='field'>
+                    <span class='label'>Message:</span>
+                    <div class='message'>" . nl2br($message) . "</div>
+                </div>
+                <p>This message was sent from your website contact form on " . date("Y-m-d H:i:s") . "</p>
+            </div>
+        </body>
+        </html>
+        ";
+        
+        // Email headers for HTML email
+        $headers = "From: {$name} <{$email}>\r\n";
+        $headers .= "Reply-To: {$email}\r\n";
+        $headers .= "MIME-Version: 1.0\r\n";
+        $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
+        
+        // Also prepare a plain text version as fallback
+        $plainText = "
+        New Contact Form Submission
+        --------------------------
+        Name: {$name}
+        Email: {$email}
+        Subject: {$subject}
+        Message: 
+        {$message}
+        
+        Sent on: " . date("Y-m-d H:i:s");
+        
+        // Send email with error handling
+        if (mail($to, $emailSubject, $emailContent, $headers)) {
+            // Success response - you can customize this for different formats
+            header('Content-Type: application/json');
+            echo json_encode(['success' => true, 'message' => 'Your message has been sent successfully. We will contact you soon!']);
+        } else {
+            // Error response
+            header('Content-Type: application/json');
+            http_response_code(500); // Internal server error
+            echo json_encode(['success' => false, 'message' => 'Failed to send message. Please try again later or contact us directly.']);
+        }
+    } else {
+        // Return validation errors
+        header('Content-Type: application/json');
+        http_response_code(400); // Bad request
+        echo json_encode(['success' => false, 'message' => 'Validation failed', 'errors' => $errors]);
+    }
 } else {
-  echo "Please fill in all the fields.";
+    // Not a POST request
+    header('Content-Type: application/json');
+    http_response_code(405); // Method not allowed
+    echo json_encode(['success' => false, 'message' => 'Invalid request method']);
 }
-
-// You could add additional processing here if needed
-// For example, saving to database, sending emails, etc.
 ?>
 <!DOCTYPE html>
 <html lang="en">
