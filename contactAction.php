@@ -1,14 +1,44 @@
 <?php
 // Get form data
 $name = isset($_POST['name']) ? htmlspecialchars($_POST['name']) : '';
+//Checks if the name field was submitted via POST.
+//If it exists: htmlspecialchars() is used to convert special characters (like <, >, &) to HTML-safe entities, helping prevent XSS (Cross-Site Scripting) attacks.
+//If it doesn’t exist: an empty string '' is assigned
 $email = isset($_POST['email']) ? htmlspecialchars($_POST['email']) : '';
 $subject = isset($_POST['subject']) ? htmlspecialchars($_POST['subject']) : '';
 $message = isset($_POST['message']) ? htmlspecialchars($_POST['message']) : '';
 
+if ($name && $email && $subject && $message) {
+  // Recipient email address
+  $to = 'georgeshaddad560@gmail.com'; // Change this to your email
+
+  // Email subject
+  $emailSubject = "Contact Form Submission: $subject";
+
+  // Email body
+  $emailBody = "You have received a new message from your website contact form.\n\n";
+  $emailBody .= "Name: $name\n";
+  $emailBody .= "Email: $email\n";
+  $emailBody .= "Subject: $subject\n";
+  $emailBody .= "Message:\n$message\n";
+
+  // Email headers
+  $headers = "From: $name <$email>\r\n";
+  $headers .= "Reply-To: $email\r\n";
+
+  // Send email
+  if (mail($to, $emailSubject, $emailBody, $headers)) {
+      echo "Message sent successfully!";
+  } else {
+      echo "Failed to send message. Please try again later.";
+  }
+} else {
+  echo "Please fill in all the fields.";
+}
+
 // You could add additional processing here if needed
 // For example, saving to database, sending emails, etc.
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
