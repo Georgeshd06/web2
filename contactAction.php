@@ -1,110 +1,242 @@
 <?php
-// Check if form was submitted via POST
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Get form data with better input sanitization
-    $name = isset($_POST['name']) ? filter_var($_POST['name'], FILTER_SANITIZE_STRING) : '';
-    $email = isset($_POST['email']) ? filter_var($_POST['email'], FILTER_SANITIZE_EMAIL) : '';
-    $subject = isset($_POST['subject']) ? filter_var($_POST['subject'], FILTER_SANITIZE_STRING) : '';
-    $message = isset($_POST['message']) ? filter_var($_POST['message'], FILTER_SANITIZE_STRING) : '';
+// Enable error reporting for debugging
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+// Log function to track execution
+function logMessage($message) {
+    // Uncomment to write to a log file
+    // file_put_contents('email_log.txt', date('[Y-m-d H:i:s] ') . $message . "\n", FILE_APPEND);
+    echo "<div style='padding:5px;margin:5px;border:1px solid #ccc;'>" . $message . "</div>";
+}
+
+logMessage("Script started");
+
+// Get form data
+$name = isset($_POST['name']) ? filter_var($_POST['name'], FILTER_SANITIZE_STRING) : '';
+$email = isset($_POST['email']) ? filter_var($_POST['email'], FILTER_SANITIZE_EMAIL) : '';
+$subject = isset($_POST['subject']) ? filter_var($_POST['subject'], FILTER_SANITIZE_STRING) : '';
+$message = isset($_POST['message']) ? filter_var($_POST['message'], FILTER_SANITIZE_STRING) : '';
+
+logMessage("Form data received - Name: $name, Email: $email, Subject: $subject");
+
+// Basic validation
+if ($name && $email && $subject && $message) {
+    logMessage("All required fields present");
     
-    // Extra validation
-    $errors = [];
-    
-    // Validate email format
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $errors[] = "Invalid email format";
+    // Check mail function availability
+    if (!function_exists('mail')) {
+        logMessage("ERROR: PHP mail() function does not exist or is disabled");
+        echo "Server configuration error: mail function not available";
+        exit;
     }
     
-    // Check if all required fields are filled
-    if (empty($name) || empty($email) || empty($subject) || empty($message)) {
-        $errors[] = "All fields are required";
-    }
+    // Mail configuration info (for debugging)
+    $mailConfig = "Mail Configuration - sendmail_path: " . ini_get('sendmail_path') . 
+                  ", SMTP: " . ini_get('SMTP') . 
+                  ", smtp_port: " . ini_get('smtp_port');
+    logMessage($mailConfig);
     
-    // Process if no errors
-    if (empty($errors)) {
-        // Recipient email address
-        $to = 'georgeshaddad560@gmail.com';
-        
-        // Email subject with better formatting
-        $emailSubject = "Contact Form: " . $subject;
-        
-        // Create email content in HTML format for better appearance
-        $emailContent = "
-        <html>
-        <head>
-            <title>Contact Form Submission</title>
-            <style>
-                body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-                .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-                h2 { color: #2c3e50; border-bottom: 1px solid #eee; padding-bottom: 10px; }
-                .field { margin-bottom: 15px; }
-                .label { font-weight: bold; }
-                .message { background-color: #f9f9f9; padding: 15px; border-left: 4px solid #ddd; }
-            </style>
-        </head>
-        <body>
-            <div class='container'>
-                <h2>New Contact Form Submission</h2>
-                <div class='field'>
-                    <span class='label'>Name:</span> {$name}
-                </div>
-                <div class='field'>
-                    <span class='label'>Email:</span> {$email}
-                </div>
-                <div class='field'>
-                    <span class='label'>Subject:</span> {$subject}
-                </div>
-                <div class='field'>
-                    <span class='label'>Message:</span>
-                    <div class='message'>" . nl2br($message) . "</div>
-                </div>
-                <p>This message was sent from your website contact form on " . date("Y-m-d H:i:s") . "</p>
+    // Recipient email address
+    $to = 'georgeshaddad560@gmail.com';
+    
+    // Email subject
+    $emailSubject = "Contact Form Submission: $subject";
+    
+    // Email body - both HTML and plain text versions
+    
+    // HTML version
+    $emailBodyHtml = "
+    <html>
+    <head>
+        <title>Contact Form Submission</title>
+        <style>
+            body { font-family: Arial, sans-serif; line-height: 1.6; }
+            .container { max-width: 600px; margin: 0 auto; }
+            h2 { color: #333; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+            .field { margin-bottom: 15px; }
+            .label { font-weight: bold; }
+            .message { background-color: #f9f9f9; padding: 15px; border-left: 4px solid #ddd; }
+        </style>
+    </head>
+    <body>
+        <div class='container'>
+            <h2>New Contact Form Submission</h2>
+            <div class='field'>
+                <span class='label'>Name:</span> {$name}
             </div>
-        </body>
-        </html>
-        ";
+            <div class='field'>
+                <span class='label'>Email:</span> {$email}
+            </div>
+            <div class='field'>
+                <span class='label'>Subject:</span> {$subject}
+            </div>
+            <div class='field'>
+                <span class='label'>Message:</span>
+                <div class='message'>" . nl2br($message) . "</div>
+            </div>
+            <p>This message was sent from your website contact form on " . date("Y-m-d H:i:s") . "</p>
+        </div>
+    </body>
+    </html>
+    ";
+    
+    // Plain text version as fallback
+    $emailBodyText = "You have received a new message from your website contact form.\n\n";
+    $emailBodyText .= "Name: $name\n";
+    $emailBodyText .= "Email: $email\n";
+    $emailBodyText .= "Subject: $subject\n";
+    $emailBodyText .= "Message:\n$message\n";
+    $emailBodyText .= "\nSent on: " . date("Y-m-d H:i:s");
+    
+    // Try both HTML and plain text methods
+    
+    // Method 1: HTML Email with proper headers
+    $headersHtml = "From: $name <$email>\r\n";
+    $headersHtml .= "Reply-To: $email\r\n";
+    $headersHtml .= "MIME-Version: 1.0\r\n";
+    $headersHtml .= "Content-Type: text/html; charset=UTF-8\r\n";
+    $headersHtml .= "X-Mailer: PHP/" . phpversion();
+    
+    logMessage("Attempting to send HTML email");
+    $mailResultHtml = mail($to, $emailSubject, $emailBodyHtml, $headersHtml);
+    
+    if ($mailResultHtml) {
+        logMessage("HTML email apparently sent successfully");
+    } else {
+        $error = error_get_last();
+        logMessage("Failed to send HTML email. Error: " . ($error ? $error['message'] : 'Unknown error'));
+    }
+    
+    // Method 2: Plain text email (as backup)
+    $headersText = "From: $name <$email>\r\n";
+    $headersText .= "Reply-To: $email\r\n";
+    $headersText .= "X-Mailer: PHP/" . phpversion();
+    
+    logMessage("Attempting to send plain text email as backup");
+    $mailResultText = mail($to, $emailSubject, $emailBodyText, $headersText);
+    
+    if ($mailResultText) {
+        logMessage("Plain text email apparently sent successfully");
+    } else {
+        $error = error_get_last();
+        logMessage("Failed to send plain text email. Error: " . ($error ? $error['message'] : 'Unknown error'));
+    }
+    
+    // Response to user
+    if ($mailResultHtml || $mailResultText) {
+        logMessage("At least one email method succeeded");
         
-        // Email headers for HTML email
-        $headers = "From: {$name} <{$email}>\r\n";
-        $headers .= "Reply-To: {$email}\r\n";
-        $headers .= "MIME-Version: 1.0\r\n";
-        $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
-        
-        // Also prepare a plain text version as fallback
-        $plainText = "
-        New Contact Form Submission
-        --------------------------
-        Name: {$name}
-        Email: {$email}
-        Subject: {$subject}
-        Message: 
-        {$message}
-        
-        Sent on: " . date("Y-m-d H:i:s");
-        
-        // Send email with error handling
-        if (mail($to, $emailSubject, $emailContent, $headers)) {
-            // Success response - you can customize this for different formats
+        // For AJAX responses
+        if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest') {
             header('Content-Type: application/json');
-            echo json_encode(['success' => true, 'message' => 'Your message has been sent successfully. We will contact you soon!']);
+            echo json_encode(['success' => true, 'message' => 'Message sent successfully!']);
         } else {
-            // Error response
-            header('Content-Type: application/json');
-            http_response_code(500); // Internal server error
-            echo json_encode(['success' => false, 'message' => 'Failed to send message. Please try again later or contact us directly.']);
+            echo "Message sent successfully!";
         }
     } else {
-        // Return validation errors
-        header('Content-Type: application/json');
-        http_response_code(400); // Bad request
-        echo json_encode(['success' => false, 'message' => 'Validation failed', 'errors' => $errors]);
+        logMessage("Both email methods failed");
+        
+        // Try a final simple attempt with minimal parameters
+        $simpleResult = mail($to, "URGENT: Contact Form Attempt", "Someone tried to contact you but emails are failing.\n\nName: $name\nEmail: $email\n\nPlease check your server mail configuration.");
+        
+        if ($simpleResult) {
+            logMessage("Simple notification email sent");
+        } else {
+            logMessage("All email attempts failed. Server likely cannot send mail.");
+        }
+        
+        // Check server environment for clues
+        logMessage("Server Environment - PHP: " . phpversion() . ", Software: " . $_SERVER['SERVER_SOFTWARE']);
+        
+        // For AJAX responses
+        if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest') {
+            header('Content-Type: application/json');
+            echo json_encode([
+                'success' => false, 
+                'message' => 'Failed to send message. Your server may not be configured to send email.',
+                'debug_info' => 'Check that your hosting provider allows PHP mail()'
+            ]);
+        } else {
+            echo "Failed to send message. Please try again later or contact the administrator.";
+            echo "<p>Troubleshooting: Your server may not be configured to send email. Contact your hosting provider.</p>";
+        }
     }
 } else {
-    // Not a POST request
-    header('Content-Type: application/json');
-    http_response_code(405); // Method not allowed
-    echo json_encode(['success' => false, 'message' => 'Invalid request method']);
+    logMessage("Missing required fields");
+    
+    // List which fields are missing
+    $missingFields = [];
+    if (!$name) $missingFields[] = 'name';
+    if (!$email) $missingFields[] = 'email';
+    if (!$subject) $missingFields[] = 'subject';
+    if (!$message) $missingFields[] = 'message';
+    
+    logMessage("Missing fields: " . implode(', ', $missingFields));
+    
+    // For AJAX responses
+    if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest') {
+        header('Content-Type: application/json');
+        echo json_encode([
+            'success' => false, 
+            'message' => 'Please fill in all the fields.',
+            'missing_fields' => $missingFields
+        ]);
+    } else {
+        echo "Please fill in all the fields.";
+    }
 }
+
+// Alternative email solutions (commented out - uncomment for production use)
+/*
+// 1. Using PHP's built-in mail() function often fails on many hosting providers.
+// 2. Consider using a proper email library like PHPMailer:
+//    - Install via Composer: composer require phpmailer/phpmailer
+//    - Docs: https://github.com/PHPMailer/PHPMailer
+// 3. Or use an email service API:
+//    - SendGrid: https://sendgrid.com/
+//    - Mailgun: https://www.mailgun.com/
+//    - AWS SES: https://aws.amazon.com/ses/
+*/
+
+// If you want to implement PHPMailer, here's a starting point:
+/*
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+
+require 'vendor/autoload.php'; // If using Composer
+
+$mail = new PHPMailer(true);
+
+try {
+    // Server settings
+    $mail->SMTPDebug = SMTP::DEBUG_SERVER;           // Enable verbose debug output
+    $mail->isSMTP();                                 // Send using SMTP
+    $mail->Host       = 'smtp.example.com';          // Set the SMTP server to send through
+    $mail->SMTPAuth   = true;                        // Enable SMTP authentication
+    $mail->Username   = 'user@example.com';          // SMTP username
+    $mail->Password   = 'password';                  // SMTP password
+    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; // Enable TLS encryption
+    $mail->Port       = 587;                         // TCP port to connect to
+
+    // Recipients
+    $mail->setFrom('from@example.com', 'Mailer');
+    $mail->addAddress('joe@example.net', 'Joe User');
+    $mail->addReplyTo('info@example.com', 'Information');
+
+    // Content
+    $mail->isHTML(true);                             // Set email format to HTML
+    $mail->Subject = 'Here is the subject';
+    $mail->Body    = 'This is the HTML message body';
+    $mail->AltBody = 'This is the plain text message body for non-HTML mail clients';
+
+    $mail->send();
+    echo 'Message has been sent';
+} catch (Exception $e) {
+    echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+}
+*/
 ?>
 <!DOCTYPE html>
 <html lang="en">
